@@ -1,0 +1,64 @@
+[gd_scene load_steps=5 format=3 uid="uid://i12vovfytvmo"]
+
+[ext_resource type="Script" path="res://HUD.cs" id="1_nmjkb"]
+
+[sub_resource type="SystemFont" id="SystemFont_5rfr4"]
+
+[sub_resource type="SystemFont" id="SystemFont_n2ovb"]
+
+[sub_resource type="SystemFont" id="SystemFont_3p5o4"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_nmjkb")
+
+[node name="ScoreLabel" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 88.0
+grow_horizontal = 2
+theme_override_fonts/font = SubResource("SystemFont_5rfr4")
+theme_override_font_sizes/font_size = 64
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Message" type="Label" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -166.0
+offset_top = -88.0
+offset_right = 166.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/font = SubResource("SystemFont_n2ovb")
+theme_override_font_sizes/font_size = 64
+text = "Dodge em!"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StartButton" type="Button" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -79.0
+offset_top = -48.0
+offset_right = 79.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = SubResource("SystemFont_3p5o4")
+theme_override_font_sizes/font_size = 64
+text = "Start"
+
+[node name="MessageTimer" type="Timer" parent="."]
+
+[connection signal="pressed" from="StartButton" to="." method="OnStartButtonPressed"]
+[connection signal="timeout" from="MessageTimer" to="." method="OnMessageTimerTimeout"]

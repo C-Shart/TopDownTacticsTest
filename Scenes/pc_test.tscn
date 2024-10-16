@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://4vjtqbxefvms"]
+
+[ext_resource type="Script" path="res://PlayerMovement.cs" id="1_0mmfu"]
+[ext_resource type="Texture2D" uid="uid://43amewft2k4u" path="res://Assets/Sprites/RPGMcharacter/_down idle.png" id="1_y4kwb"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sp3pv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wax01"]
+size = Vector2(13, 28)
+
+[node name="Player" type="CharacterBody2D"]
+z_index = 1
+script = ExtResource("1_0mmfu")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+y_sort_enabled = true
+texture = ExtResource("1_y4kwb")
+hframes = 4
+vframes = 2
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Sprite2D"]
+sprite_frames = SubResource("SpriteFrames_sp3pv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 2)
+shape = SubResource("RectangleShape2D_wax01")
