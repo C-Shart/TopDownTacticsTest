@@ -47,7 +47,7 @@ public partial class PlayerTut : Area2D
 
     public void HandleInput()
     {
-        var attacking = (playerSprite.Animation == "attack down" || playerSprite.Animation == "attack side" || playerSprite.Animation == "attack up") && playerSprite.IsPlaying();
+        // var attacking = (playerSprite.Animation == "attack down" || playerSprite.Animation == "attack side" || playerSprite.Animation == "attack up") && playerSprite.IsPlaying();
 
         if (Input.IsActionJustPressed("attack"))
         {
@@ -80,7 +80,7 @@ public partial class PlayerTut : Area2D
 
     public void UpdateAnimation(double delta)
     {
-        var attacking = (playerSprite.Animation == "attack down" || playerSprite.Animation == "attack side" || playerSprite.Animation == "attack up") && playerSprite.IsPlaying();
+        var attacking = (playerSprite.Animation == $"attack {lastAnimDirection}") && playerSprite.IsPlaying();
 
         if (!attacking)
         {
