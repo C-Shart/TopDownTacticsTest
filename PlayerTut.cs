@@ -17,6 +17,10 @@ public partial class PlayerTut : Area2D
     private Vector2 velocity = Vector2.Zero;
     private AnimatedSprite2D playerSprite;
 
+    // State machine scaffolding
+    private bool isAttacking;
+    private bool isHurt;
+
     public void Start(Vector2 position)
     {
         Position = position;
@@ -28,6 +32,9 @@ public partial class PlayerTut : Area2D
     {
         playerSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         ScreenSize = GetViewportRect().Size;
+
+        isAttacking = false;
+        isHurt = false;
     }
 
     public override void _Process(double delta)
@@ -104,39 +111,13 @@ public partial class PlayerTut : Area2D
         Position += velocity * (float)delta;
     }
 
+    // Intended behavior: Stop movement momentarily, play attack animation
     public void Attack()
     {
         GD.Print($"ATTACK:");
 
-        var currentAnimation = playerSprite.Animation;
-        GD.Print($"StartAnimation : { currentAnimation }");
-
-        bool isSide = lastAnimDirection == "side";
-        bool isDown = lastAnimDirection == "down";
-        bool isUp = lastAnimDirection == "up";
-
-        // Logic to attack or play animation.
-        // Intended behavior: Stop movement momentarily, play attack animation
-        // animatedSprite2D.Animation = "attack ";
-
         playerSprite.Stop();
-
-        if (isSide)
-        {
-            playerSprite.Play("attack side");
-        }
-        else if (isUp)
-        {
-            playerSprite.Play("attack up");
-        }
-        else if (isDown)
-        {
-            playerSprite.Play("attack down");
-        }
-        else
-        {
-            GD.Print("ERROR: Attack: What did you do?");
-        }
+        playerSprite.Play($"attack {lastAnimDirection}");
 
         GD.Print($"EndAnimation   : {playerSprite.Animation}");
         GD.Print($"FlipH          : {playerSprite.FlipH}");

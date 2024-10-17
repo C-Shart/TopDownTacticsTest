@@ -1,4 +1,4 @@
-[gd_scene load_steps=55 format=3 uid="uid://b6wj4hqip4ysu"]
+[gd_scene load_steps=56 format=3 uid="uid://b6wj4hqip4ysu"]
 
 [ext_resource type="Texture2D" uid="uid://qasr67sxpm5r" path="res://Assets/Sprites/RPGMcharacter/_down attack.png" id="1_re05l"]
 [ext_resource type="Script" path="res://PlayerTut.cs" id="1_sl4di"]
@@ -353,17 +353,26 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_160mg"]
+radius = 15.0
+height = 36.0
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4qhtu"]
 size = Vector2(9, 29)
 
 [node name="Player" type="Area2D"]
 script = ExtResource("1_sl4di")
 Speed = 100
-metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_gpnxl")
-animation = &"attack down"
+animation = &"attack up"
+
+[node name="Area2D" type="Area2D" parent="AnimatedSprite2D"]
+
+[node name="HurtBox" type="CollisionShape2D" parent="AnimatedSprite2D/Area2D"]
+position = Vector2(0, -9)
+shape = SubResource("CapsuleShape2D_160mg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
