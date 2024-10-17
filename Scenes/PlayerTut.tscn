@@ -182,7 +182,7 @@ region = Rect2(64, 64, 64, 64)
 [sub_resource type="SpriteFrames" id="SpriteFrames_gpnxl"]
 animations = [{
 "frames": [{
-"duration": 1.0,
+"duration": 2.0,
 "texture": SubResource("AtlasTexture_vcvp3")
 }, {
 "duration": 1.0,
@@ -191,12 +191,12 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ibprb")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack down",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 2.0,
 "texture": SubResource("AtlasTexture_5is15")
 }, {
 "duration": 1.0,
@@ -205,12 +205,12 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_gswdw")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack side",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 2.0,
 "texture": SubResource("AtlasTexture_scvqs")
 }, {
 "duration": 1.0,
@@ -219,9 +219,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_tqg78")
 }],
-"loop": true,
+"loop": false,
 "name": &"attack up",
-"speed": 5.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -363,9 +363,10 @@ metadata/_edit_group_ = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_gpnxl")
-animation = &"attack side"
+animation = &"attack down"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0.5, 1.5)
 shape = SubResource("RectangleShape2D_4qhtu")
 

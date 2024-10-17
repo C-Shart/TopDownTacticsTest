@@ -41,7 +41,7 @@ curve = SubResource("Curve2D_dvjtg")
 
 [node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
 position = Vector2(-962, -800)
-rotation = -0.00197358
+rotation = -0.00197359
 
 [node name="HUD" parent="." instance=ExtResource("5_uuffh")]
 

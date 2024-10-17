@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 
 public partial class PlayerTut : Area2D
 {
@@ -12,6 +13,10 @@ public partial class PlayerTut : Area2D
 
     public Vector2 ScreenSize;
 
+    private string lastAnimDirection = "down";
+    private Vector2 velocity = Vector2.Zero;
+    private AnimatedSprite2D playerSprite;
+
     public void Start(Vector2 position)
     {
         Position = position;
@@ -21,72 +26,120 @@ public partial class PlayerTut : Area2D
 
     public override void _Ready()
     {
+        playerSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
         ScreenSize = GetViewportRect().Size;
     }
 
     public override void _Process(double delta)
     {
-        var velocity = Vector2.Zero;
-        var animatedSprite2D = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
 
-        // Control inputs
-        if (Input.IsActionPressed("ui_right"))
-        {
-            velocity.X +=1;
-        }
-        if (Input.IsActionPressed("ui_left"))
-        {
-            velocity.X -=1;
-        }
-        if (Input.IsActionPressed("ui_down"))
-        {
-            velocity.Y +=1;
-        }
-        if (Input.IsActionPressed("ui_up"))
-        {
-            velocity.Y -=1;
-        }
-        if (Input.IsActionPressed("attack"))
-        {
-            // Logic to attack or play animation.
-        }
-        
+        HandleInput();
+        UpdateAnimation(delta);
 
+    }
 
-        // Animation logic based on character movement
-        if (velocity.Length() > 0)
+    public void HandleInput()
+    {
+        var attacking = (playerSprite.Animation == "attack down" || playerSprite.Animation == "attack side" || playerSprite.Animation == "attack up") && playerSprite.IsPlaying();
+
+        if (Input.IsActionJustPressed("attack"))
         {
-            velocity = velocity.Normalized() * Speed;
-            animatedSprite2D.Play();
+            GD.Print($"ATTACK: Attack pressed");
+            Attack();
         }
         else
         {
-            animatedSprite2D.Stop();
+            velocity = Vector2.Zero;
+
+            if (Input.IsActionPressed("ui_right"))
+            {
+                velocity.X +=1;
+            }
+            if (Input.IsActionPressed("ui_left"))
+            {
+                velocity.X -=1;
+            }
+            if (Input.IsActionPressed("ui_down"))
+            {
+                velocity.Y +=1;
+            }
+            if (Input.IsActionPressed("ui_up"))
+            {
+                velocity.Y -=1;
+            }
         }
 
+    }
+
+    public void UpdateAnimation(double delta)
+    {
+        var attacking = (playerSprite.Animation == "attack down" || playerSprite.Animation == "attack side" || playerSprite.Animation == "attack up") && playerSprite.IsPlaying();
+
+        if (!attacking)
+        {
+            MoveCharacter(delta);
+        }
+    }
+
+    public void MoveCharacter(double delta)
+    {
+        if (velocity.Length() == 0)
+            playerSprite.Play($"idle {lastAnimDirection}");
+        else
+        {
+            string direction = "down";
+            if (velocity.X != 0)
+            {
+                direction = "side";
+                playerSprite.FlipH = velocity.X > 0;
+            }
+            else if (velocity.Y < 0)
+            {
+                direction = "up";
+            }
+            velocity = velocity.Normalized() * Speed;
+            playerSprite.Play($"walk {direction}");
+            lastAnimDirection = direction;
+        }
         Position += velocity * (float)delta;
+    }
 
-        // Supposed to clamp player within screen edges, but instead clamps them to the edge?
-        /* Position = new Vector2(
-            x: Mathf.Clamp(Position.X, 0, ScreenSize.X),
-            y: Mathf.Clamp(Position.Y, 0, ScreenSize.Y)
-        ); */
+    public void Attack()
+    {
+        GD.Print($"ATTACK:");
 
-        // Changes animation depending on movement direction
-        if (velocity.X != 0)
+        var currentAnimation = playerSprite.Animation;
+        GD.Print($"StartAnimation : { currentAnimation }");
+
+        bool isSide = lastAnimDirection == "side";
+        bool isDown = lastAnimDirection == "down";
+        bool isUp = lastAnimDirection == "up";
+
+        // Logic to attack or play animation.
+        // Intended behavior: Stop movement momentarily, play attack animation
+        // animatedSprite2D.Animation = "attack ";
+
+        playerSprite.Stop();
+
+        if (isSide)
         {
-            animatedSprite2D.Animation = "walk side";
-            animatedSprite2D.FlipV = false;
-            animatedSprite2D.FlipH = velocity.X > 0;
+            playerSprite.Play("attack side");
         }
-        else if (velocity.Y < 0)
+        else if (isUp)
         {
-            animatedSprite2D.Animation = "walk up";
+            playerSprite.Play("attack up");
         }
-        else if (velocity.Y > 0)
+        else if (isDown)
         {
-            animatedSprite2D.Animation = "walk down";
+            playerSprite.Play("attack down");
         }
+        else
+        {
+            GD.Print("ERROR: Attack: What did you do?");
+        }
+
+        GD.Print($"EndAnimation   : {playerSprite.Animation}");
+        GD.Print($"FlipH          : {playerSprite.FlipH}");
     }
 
     private void OnBodyEntered(Node2D body)

@@ -3,10 +3,13 @@
 [ext_resource type="Script" path="res://HUD.cs" id="1_nmjkb"]
 
 [sub_resource type="SystemFont" id="SystemFont_5rfr4"]
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_n2ovb"]
+subpixel_positioning = 0
 
 [sub_resource type="SystemFont" id="SystemFont_3p5o4"]
+subpixel_positioning = 0
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_nmjkb")
