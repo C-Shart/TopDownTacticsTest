@@ -7,6 +7,9 @@ public partial class PlayerTut : Area2D
 {
     [Signal]
     public delegate void HitEventHandler();
+    
+    [Signal]
+    public delegate void HurtEventHandler();
 
     [Export]
     public int Speed { get; set; } = 400;
@@ -16,6 +19,7 @@ public partial class PlayerTut : Area2D
     private string lastAnimDirection = "down";
     private Vector2 velocity = Vector2.Zero;
     private AnimatedSprite2D playerSprite;
+    private CollisionShape2D hurtBox;
 
     // State machine scaffolding
     private bool isAttacking;
@@ -31,6 +35,10 @@ public partial class PlayerTut : Area2D
     public override void _Ready()
     {
         playerSprite = GetNode<AnimatedSprite2D>("AnimatedSprite2D");
+        hurtBox = GetNode<CollisionShape2D>("HurtBox");
+
+        hurtBox.Disabled = true;
+
         ScreenSize = GetViewportRect().Size;
 
         isAttacking = false;
@@ -47,8 +55,6 @@ public partial class PlayerTut : Area2D
 
     public void HandleInput()
     {
-        // var attacking = (playerSprite.Animation == "attack down" || playerSprite.Animation == "attack side" || playerSprite.Animation == "attack up") && playerSprite.IsPlaying();
-
         if (Input.IsActionJustPressed("attack"))
         {
             GD.Print($"ATTACK: Attack pressed");
@@ -80,7 +86,7 @@ public partial class PlayerTut : Area2D
 
     public void UpdateAnimation(double delta)
     {
-        var attacking = (playerSprite.Animation == $"attack {lastAnimDirection}") && playerSprite.IsPlaying();
+        bool attacking = playerSprite.Animation == $"attack {lastAnimDirection}" && playerSprite.IsPlaying();
 
         if (!attacking)
         {
@@ -128,5 +134,12 @@ public partial class PlayerTut : Area2D
         Hide();
         EmitSignal(SignalName.Hit);
         GetNode<CollisionShape2D>("CollisionShape2D").SetDeferred(CollisionShape2D.PropertyName.Disabled, true);
+    }
+
+    private void OnHurtboxEntered(Node2D hurtbox)
+    {
+        EmitSignal(SignalName.Hurt);
+        // GetNode<CollisionShape2D>("HurtBox").SetDeferred(CollisionShape2D.PropertyName.Disabled, false);
+
     }
 }
